@@ -10,6 +10,15 @@ body {
     sans-serif;
 }
 
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -18,4 +27,144 @@ body {
   margin: 2rem auto;
   border: 1px solid black;
   padding: 1rem;
+}
+
+.dashboard {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.justify-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header {
+  background-color: #f8f8f8;
+  padding: 1rem 1.5rem;
+}
+
+.logout-btn {
+  border: 1px solid red;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  background-color: transparent;
+  color: red;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: red;
+  color: white;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.add-btn {
+  border: 1px solid green;
+  padding: 0.25rem 0.45rem 0 0.45rem;
+  font-size: 2rem;
+  border-radius: 4px;
+  background-color: transparent;
+  color: green;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: green;
+  color: white;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.15rem;
+}
+
+.folder {
+  border: 2px solid black;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  color: black;
+  transition: all 0.2s linear;
+}
+
+.folder:hover {
+  text-decoration: none;
+  background-color: black;
+  color: white;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 999;
+}
+
+.modal-container {
+  position: absolute;
+  width: 500px;
+  left: 50%;
+  right: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.folder-name-input {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 0.25rem;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.green-outline-btn {
+  border: 1px solid green;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  background-color: transparent;
+  color: green;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+
+.green-outline-btn:hover {
+  background-color: green;
+  color: white;
+}
+
+.green-primary-btn {
+  border: 1px solid green;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  background-color: green;
+  color: white;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+
+.green-primary-btn:hover {
+  background-color: transparent;
+  color: green;
 }

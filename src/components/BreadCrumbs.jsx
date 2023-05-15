@@ -8,11 +8,14 @@ function BreadCrumbs({ currentFolder }) {
   if (currentFolder) path = [...path, ...currentFolder.path];
 
   return (
-    <div>
+    <div className="breadcrumbs">
       {path.map((folder) => (
-        <Link key={folder.id} to={folder.id ? `/folder/${folder.id}` : "/"}>
-          {folder.name}
-        </Link>
+        <>
+          <Link key={folder.id} to={folder.id ? `/folder/${folder.id}` : "/"}>
+            {folder.name}
+          </Link>
+          <span>/</span>
+        </>
       ))}
       {currentFolder && <span>{currentFolder.name}</span>}
     </div>
