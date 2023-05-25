@@ -113,5 +113,27 @@ export function useFolder(folderId = null, folder = null) {
     });
   }, [folderId, user]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(db, "files"),
+      where("folderId", "==", folderId),
+      where("userId", "==", user.uid),
+      orderBy("createdAt")
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      dispatch({
+        type: ACTIONS.SET_CHILD_FILES,
+        payload: {
+          childFiles: querySnapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+          }),
+        },
+      });
+    });
+  }, [folderId, user]);
+
   return state;
 }
