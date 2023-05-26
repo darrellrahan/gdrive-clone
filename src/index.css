@@ -32,8 +32,8 @@ a:hover {
 .dashboard {
   max-width: 1000px;
   margin: auto;
-  position: relative;
   min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
 .justify-between {
@@ -173,21 +173,30 @@ a:hover {
 
 .progress {
   position: absolute;
-  bottom: 2rem;
-  right: 0;
-  width: 250px;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  width: 350px;
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
   border-radius: 4px;
   padding: 1rem;
+  z-index: 1000;
 }
 
 .progress .name {
   font-weight: normal;
   font-size: 1.15rem;
-  margin-bottom: 0.5rem;
+}
+
+.progress .close {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .progress .bar {
   border-radius: 30px;
-  height: 1rem;
+  color: white;
+  text-align: center;
+  transition: all 0.3s linear;
 }

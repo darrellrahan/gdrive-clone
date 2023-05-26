@@ -8,7 +8,15 @@ import Folder from "./Folder";
 import { AiFillFolderAdd, AiFillFileAdd } from "react-icons/ai";
 import ModalFolder from "./ModalFolder";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import File from "./File";
 
 function Dashboard() {
@@ -17,6 +25,11 @@ function Dashboard() {
   const navigate = useNavigate();
   const { folder, childFolders, childFiles } = useFolder(folderId);
   const [isModal, setIsModal] = useState(false);
+  const [uploadFileState, setUploadFileState] = useState({
+    progress: null,
+    name: null,
+    error: false,
+  });
 
   useEffect(() => {
     if (!user) navigate("/");
@@ -39,17 +52,50 @@ function Dashboard() {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadFileState({
+          ...uploadFileState,
+          name: file.name,
+          progress: progress,
+        });
         console.log("Upload is " + progress + "% done");
       },
-      (e) => alert(e),
       () => {
+        setUploadFileState({
+          name: file.name,
+          progress: 100,
+          error: true,
+        });
+      },
+      () => {
+        setUploadFileState({
+          name: null,
+          progress: null,
+          error: false,
+        });
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadUrl) => {
-          await addDoc(collection(db, "files"), {
-            url: downloadUrl,
-            name: file.name,
-            createdAt: serverTimestamp(),
-            folderId: folder.id,
-            userId: user.uid,
+          const q = query(
+            collection(db, "files"),
+            where("name", "==", file.name),
+            where("userId", "==", user.uid),
+            where("folderId", "==", folder.id)
+          );
+
+          getDocs(q).then(async (existingFiles) => {
+            const existingFile = existingFiles.docs[0];
+            if (existingFile?.exists()) {
+              await updateDoc(existingFile.ref, {
+                createdAt: serverTimestamp(),
+                url: downloadUrl,
+              });
+            } else {
+              await addDoc(collection(db, "files"), {
+                url: downloadUrl,
+                name: file.name,
+                createdAt: serverTimestamp(),
+                folderId: folder.id,
+                userId: user.uid,
+              });
+            }
           });
         });
       }
@@ -116,6 +162,41 @@ function Dashboard() {
             <File key={childFile.id} file={childFile} />
           ))}
       </div>
+      {uploadFileState.name || uploadFileState.progress ? (
+        <div className="progress">
+          <div
+            className="justify-between"
+            style={{ marginBottom: "1rem", gap: "1rem" }}
+          >
+            <h1 className="name">{uploadFileState.name}</h1>
+            {uploadFileState.error ? (
+              <button
+                className="close"
+                onClick={() =>
+                  setUploadFileState({
+                    name: null,
+                    progress: null,
+                    error: false,
+                  })
+                }
+              >
+                X
+              </button>
+            ) : null}
+          </div>
+          <div
+            className="bar"
+            style={{
+              width: `${uploadFileState.progress}%`,
+              backgroundColor: uploadFileState.error ? "red" : "blue",
+            }}
+          >
+            {!uploadFileState.error
+              ? `${Math.round(uploadFileState.progress)}%`
+              : "Error"}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
